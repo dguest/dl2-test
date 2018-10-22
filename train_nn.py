@@ -98,6 +98,7 @@ def get_discrim(jets, model_path, weights_path):
 # These constants are used to normalize the NN inputs. We typically
 # want inputs that are around zero with standard deviations around 1,
 # but this doesn't need to be exact.
+JF_NAME = 'JetFitter_significance3d'
 JF_OFFSET = -0.7
 JF_SCALE = 0.75
 JF_DEFAULT = 0.1
@@ -113,7 +114,7 @@ def preproc_inputs(jets):
 
     # The jf_sig variable has a long tail. To "normalize" this a bit
     # we take the log(x + 1) transformation.
-    jf = jets['JetFitter_significance3d']
+    jf = jets[JF_NAME]
     jf[np.isnan(jf)] = JF_DEFAULT
     jf = (jf + JF_OFFSET ) * JF_SCALE
 
@@ -142,7 +143,7 @@ def get_variables_json():
             # Note this is not the same name we use in the file! We'll
             # have to make the log1p transformation in the C++ code to
             # build this variable.
-            'name': 'jf_sig_log1p',
+            'name': JF_NAME,
             'offset': JF_OFFSET,
             'scale': JF_SCALE,
             'default': JF_DEFAULT,
@@ -163,8 +164,8 @@ def get_variables_json():
     # that's a more advanced subject.
     outputs = [
         {
-            'name': 'classes',
-            'labels': ['light', 'charm', 'bottom']
+            'name': 'DL2',
+            'labels': ['pu', 'pc', 'pb']
         }
     ]
 
